@@ -1,1 +1,1 @@
-Please replace this file here with the pkl file available at https://github.com/KRanaa/ContextoESL/releases
+Please replace this file here with the word_vectors_real.pkl file available at https://github.com/KRanaa/ContextoESL/releases
