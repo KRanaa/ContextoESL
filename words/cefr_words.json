@@ -1,0 +1,44 @@
+{
+  "A1": [
+    "book",
+    "cat",
+    "run",
+    "school",
+    "table"
+  ],
+  "A2": [
+    "market",
+    "careful",
+    "travel",
+    "weather",
+    "exercise"
+  ],
+  "B1": [
+    "opinion",
+    "responsible",
+    "tradition",
+    "traffic",
+    "resource"
+  ],
+  "B2": [
+    "debate",
+    "challenge",
+    "community",
+    "efficient",
+    "priority"
+  ],
+  "C1": [
+    "interpretation",
+    "phenomenon",
+    "sustainable",
+    "legislation",
+    "transparency"
+  ],
+  "C2": [
+    "ubiquitous",
+    "perception",
+    "mitigation",
+    "reconciliation",
+    "epistemological"
+  ]
+}
