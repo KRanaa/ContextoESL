@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Congratulations!</title>
+    <style>
+        html, body{
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      }
+        body{
+            background-image: url("/static/Images/3.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: green;
+        }
+
+        p {
+            font-size: 24px;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 12px 24px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover{
+        background-color: #45a049;
+        }
+
+        .content {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        }
+
+        .content p {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
+
+        .content button {
+        margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="content">
+    <p>You guessed the word in <b>{{ guesses }}</b> guesses.</p>
+    <a href="/"><button>Play Again</button></a>
+    </div>
+</body>
+</html>

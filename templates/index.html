@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contexto ESL</title>
+      <style>
+        html, body {
+      height: 100%; /* Full height for body and html */
+      margin: 0;
+      padding: 0;
+      }
+        body{
+            background-image: url("/static/Images/1.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        h1 {
+            font-size: 55px; 
+            text-align: center;
+            margin-top: 70px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .form-container {
+          position: relative;
+          top: 0px;
+          margin: 0 auto;
+          background-color: rgba(0, 0, 0, 0.4);
+          padding: 10px 40px;
+          border-radius: 15px;
+          box-shadow: 0 0 15px rgba(0,0,0,0.3);
+          width: 320px;
+          text-align: center;
+        }
+
+        label {
+          font-size: 20px;
+          display: block;
+          margin: 20px 0 5px;
+          text-align: center;
+        }
+
+        select {
+          width: 100%;
+          padding: 10px;
+          font-size: 16px;
+          border: none;
+          border-radius: 5px;
+          background-color: #f0f0f0;
+          color: #333;
+          text-align: center;
+        }
+
+        button {
+          margin-top: 25px;
+          padding: 12px 20px;
+          font-size: 18px;
+          font-weight: bold;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        button:hover {
+          background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+  <h1>ContextoESL</h1>
+<div class="form-container">
+  <form action="/start" method="GET">
+    <label for="difficulty">Choose difficulty:</label><br>
+    <select name="difficulty" id="difficulty" required>
+      <option value="hard">Easy (CFER Level A1–A2)</option>
+      <option value="medium">Medium (CFER Level B1–B2)</option>
+      <option value="easy">Difficult (CFER Level C1–C2)</option>
+    </select>
+    <br><br>
+
+    <label for="lang">Translate words to:</label><br>
+    <select name="lang" id="lang" required>
+      <option value="hi">Hindi</option>
+      <option value="es">Spanish</option>
+      <option value="fr">French</option>
+      <option value="de">German</option>
+      <option value="ja">Japanese</option>
+      <option value="zh-CN">Chinese (Simplified)</option>
+  
+    </select>
+    <br><br>
+
+    <button type="submit">Start Game</button>
+  </form>
+</div>
+</body>
+</html>
+

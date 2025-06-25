@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contexto ESL</title>
+    <style>
+        html, body{
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      }
+        body{
+            background-image: url("/static/Images/2.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        h1{
+            font-size: 55px; 
+            text-align: center;
+            margin-top: 70px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+        .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 5px;
+        text-align: center;
+        }
+
+        input[type="text"] {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        }
+
+        button {
+        padding: 10px 10px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        background-color: #4CAF50;
+        color: white;
+        transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+        background-color: #45a049;
+        }
+
+        ul#guesses {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+        margin-top: 20px;
+        }
+        #wordInfo {
+        margin-top: 15px;
+        background-color: rgba(255, 255, 255, 0.075);
+        padding: 20px;
+        border-radius: 10px;
+        /*box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);*/
+        color: black;
+        }
+        .input-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* spacing between input and button */
+        margin: 15px 0;
+        }
+
+        .input-row input[type="text"] {
+        flex: 1;
+        max-width: 800px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Guess the Word</h1>
+    <div class="container">
+    <div class="input-row">
+        <input type="text" id="guessInput" placeholder="Enter your guess">
+        <button onclick="submitGuess()">Submit</button>
+        </div>
+        <div class="input-row">
+        <input type="text" id="sentenceInput" placeholder="Write a sentence using your best guess for hint.">
+        <button onclick="submitSentence()">Get Hint</button>
+        </div>
+
+    <p id="hintResult"></p>
+    <div id="grammarTips"></div>
+
+    <p id="result"></p>
+    <ul id="guesses"></ul>
+
+    <!-- Learn More Button and Word Info Box -->
+    <button id="learnBtn" onclick="fetchDefinition()" style="display: none;">Learn More about your guess</button>
+    <div id="wordInfo"></div>
+    </div>
+
+    <script>
+    const guesses = [];
+    let latestWord = "";
+
+    function getColorByRank(rank) {
+        if (rank <= 300) return "green";
+        if (rank <= 1000) return "orange";
+        return "red";
+    }
+
+    function submitGuess() {
+        const word = document.getElementById("guessInput").value;
+        fetch('/guess', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'word=' + encodeURIComponent(word)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Response from /guess:", data);
+            const result = document.getElementById("result");
+
+            if (data.error) {
+                result.innerText = data.error;
+                document.getElementById("learnBtn").style.display = "none";
+                document.getElementById("wordInfo").innerHTML = ""; 
+            } else {
+                result.innerText = "";
+
+                //Track latest word and reset Learn More content
+                latestWord = data.word;
+                console.log(latestWord);
+                document.getElementById("learnBtn").style.display = "inline";
+                document.getElementById("wordInfo").innerHTML = "";
+
+                // Add new guess to the list
+                guesses.push({
+                    word: data.word,
+                    rank: data.rank,
+                    similarity: data.similarity
+                });
+
+                if(data.rank===1){
+                window.location.href=`/win?guesses=${guesses.length}`;
+                return;
+                }
+
+                // Sort guesses by rank (ascending)
+                guesses.sort((a, b) => a.rank - b.rank);
+
+                // Clear and rebuild the list
+                const list = document.getElementById("guesses");
+                list.innerHTML = "";
+
+                for (const guess of guesses) {
+                    const li = document.createElement("li");
+                    li.innerText = `${guess.word} → Rank: ${guess.rank}, Similarity: ${guess.similarity}`;
+                    li.style.backgroundColor = getColorByRank(guess.rank);
+                    li.style.color = "white";           
+                    li.style.padding = "6px 12px";      
+                    li.style.borderRadius = "8px";      
+                    li.style.marginBottom = "6px";      
+                    li.style.fontWeight = "bold";      
+
+                    list.appendChild(li);
+                }
+
+                // Clear input
+                document.getElementById("guessInput").value = "";
+            }
+        });
+    }
+
+    function fetchDefinition() {
+    fetch(`/define/${latestWord}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById("wordInfo").innerText = data.error;
+            } else {
+                const html = `
+                    <p><b>Word:</b> ${data.word}</p>
+                    <p><b>Definition:</b> ${data.definition}</p>
+                    <p><b>Phonetic:</b> ${data.phonetic}</p>
+                    ${data.audio ? `<audio controls src="${data.audio}"></audio>` : ""}
+                    ${data.translation ? `<p><b>Translation:</b> ${data.translation}</p>` : ""}
+                `;
+                document.getElementById("wordInfo").innerHTML = html;
+            }
+        });
+    }
+
+
+    function submitSentence() {
+    const sentence = document.getElementById("sentenceInput").value;
+    const bestGuess = guesses[0]?.word;
+
+    if (!bestGuess) {
+        document.getElementById("hintResult").innerText = "Make a guess first!";
+        return;
+    }
+
+    fetch('/hint', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            sentence: sentence,
+            best_guess: bestGuess
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const hintResult = document.getElementById("hintResult");
+        const grammarTips = document.getElementById("grammarTips");
+
+        grammarTips.innerHTML = "";
+
+        if (data.error) {
+            hintResult.innerText = data.error;
+        } else if (data.grammar_issues) {
+            hintResult.innerText = "⚠️ Grammar issues found:";
+            data.grammar_issues.forEach(issue => {
+                const p = document.createElement("p");
+                p.innerHTML = `💡 <b>Tip:</b> ${issue.message}<br>
+                    <i>Suggestions:</i> ${issue.suggestions.join(", ") || "None"}`;
+                p.style.backgroundColor = "#fff3cd";
+                p.style.border = "1px solid #ffeeba";
+                p.style.padding = "8px";
+                p.style.borderRadius = "6px";
+                p.style.marginBottom = "10px";
+                grammarTips.appendChild(p);
+            });
+        } else {
+            hintResult.innerHTML = `✅ Correct! Here's your hint:<br><b>${data.hint}</b> (Rank: ${data.rank}, Similarity: ${data.similarity})`;
+        }
+    });
+}
+
+</script>
+
+
+</body>
+</html>
