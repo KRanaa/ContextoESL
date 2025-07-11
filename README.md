@@ -28,14 +28,17 @@ ContextoESL is an interactive, educational word-guessing game designed to help E
 ---
 
 # Run the Project Locally
-Create and activate virtual environment
+-Create and activate virtual environment
 python -m venv venv
 .\venv\Scripts\activate     # For Windows
+- Run the file generate_vectors.py to generate word embeddings
 
 # Prerequisites
 
 - Python 3.8+
 - pip
+- Virtual Environment (venv)
+- Internet Connection(for first run only)
 
 # Installation Steps
 
