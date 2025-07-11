@@ -28,7 +28,7 @@ ContextoESL is an interactive, educational word-guessing game designed to help E
 ---
 
 # Run the Project Locally
--Create and activate virtual environment
+- Create and activate virtual environment
 python -m venv venv
 .\venv\Scripts\activate     # For Windows
 - Run the file generate_vectors.py to generate word embeddings
@@ -46,4 +46,5 @@ python -m venv venv
 git clone https://github.com/your-username/ContextoESL.git
 cd ContextoESL
 pip install -r requirements.txt
+python generate_vectors.py
 python app.py
